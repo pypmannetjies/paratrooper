@@ -11,7 +11,7 @@ class GameState extends Phaser.State {
         this.load.image('canon', 'art/canon.png');
         this.load.image('bullet', 'art/bullet.png');
         this.load.image('chopper', 'art/chopper.png');
-        this.load.atlas('particles', 'art/particles/particles.png', 'art/particles/particles.json');
+        this.load.spritesheet('particles', 'art/particles/particles.png', 3, 3, 3, 1);
     }
 
     create() {
