@@ -2,6 +2,7 @@ import Turret from 'objects/Turret';
 import Bullet from 'objects/Bullet';
 import ChopperFactory from 'objects/ChopperFactory';
 import ScoreText from 'objects/ScoreText';
+import ExplosionEmitterFactory from 'objects/ExplosionEmitter';
 
 class GameState extends Phaser.State {
 
@@ -10,6 +11,7 @@ class GameState extends Phaser.State {
         this.load.image('canon', 'art/canon.png');
         this.load.image('bullet', 'art/bullet.png');
         this.load.image('chopper', 'art/chopper.png');
+        this.load.atlas('particles', 'art/particles/particles.png', 'art/particles/particles.json');
     }
 
     create() {
@@ -19,6 +21,7 @@ class GameState extends Phaser.State {
         this.chopperFactory = new ChopperFactory(this.game);
         this.bulletGroup = this.game.add.group();
         this.scoreText = new ScoreText(this.game);
+        this.emitterFactory = new ExplosionEmitterFactory(this.game);
     }
 
     update() {
@@ -26,7 +29,12 @@ class GameState extends Phaser.State {
             this.shoot();
         }
         this.createChopper();
-        this.game.physics.arcade.overlap(this.bulletGroup, this.chopperFactory.chopperGroup, this.collisionHandler, null, this);
+        this.game.physics.arcade.overlap(
+            this.bulletGroup,
+            this.chopperFactory.chopperGroup,
+            this.bulletHitChopperHandler,
+            null, this
+        );
     }
 
     shoot() {
@@ -52,7 +60,8 @@ class GameState extends Phaser.State {
         this.chopperFactory.getToAChopper();
     }
 
-    collisionHandler(bullet, chopper) {
+    bulletHitChopperHandler(bullet, chopper) {
+        this.emitterFactory.explode(bullet.x, bullet.y, bullet.body.velocity.x, bullet.body.velocity.y);
         bullet.kill();
         chopper.kill();
         this.scoreText.killedChopper();
