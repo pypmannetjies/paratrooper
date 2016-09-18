@@ -1,7 +1,7 @@
 class Chopper extends Phaser.Sprite {
 
     constructor(game) {
-        super(game, 0, 100, 'chopper');
+        super(game, 0, 40, 'chopper');
         this.createChopper();
         this.speed = 100;
     }

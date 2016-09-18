@@ -1,4 +1,4 @@
-class ScoreText extends Phaser.Text {
+class ScoreKeeper extends Phaser.Text {
     constructor(game) {
         super(game, 0, game.height - 50, "SCORE: 0", {
             fill: 'white'
@@ -25,4 +25,4 @@ class ScoreText extends Phaser.Text {
     }
 }
 
-export default ScoreText;
+export default ScoreKeeper;
