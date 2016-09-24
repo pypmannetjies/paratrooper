@@ -10,11 +10,6 @@ class ExplosionEmitterFactory {
     explode(x, y, velocityX, velocityY) {
         this.emitter.x = x;
         this.emitter.y = y;
-        if (velocityX < 0) {
-            this.emitter.minParticleSpeed.x = velocityX;
-        } else if (velocityX > 0) {
-            this.emitter.maxParticleSpeed.x = velocityX;
-        }
         this.emitter.start(true, 3000, null, 50);
 
     }

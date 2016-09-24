@@ -7,9 +7,8 @@ class ParatrooperGroup extends Phaser.Group {
     }
 
     create(chopper) {
-        let trooper = super.create();
+        let trooper = super.create(0, 0);
         trooper.x = chopper.x + chopper.width / 2;
-        trooper.anchor.x = 0.5;
         trooper.y = chopper.y;
     }
 
