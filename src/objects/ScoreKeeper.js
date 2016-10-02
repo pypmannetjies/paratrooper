@@ -10,17 +10,20 @@ class ScoreKeeper extends Phaser.Text {
 
     shotsFired() {
         if (this.score > 0) {
-            this.score -= 1;
-            this.updateScore();
+            this.updateScore(-1);
         }
     }
 
     killedChopper() {
-        this.score += 10;
-        this.updateScore();
+        this.updateScore(10);
     }
 
-    updateScore() {
+    killedParashooter() {
+        this.updateScore(5);
+    }
+
+    updateScore(amount) {
+        this.score = this.score + amount;
         this.text = "SCORE: " + this.score;
     }
 }

@@ -49,15 +49,29 @@ class GameState extends Phaser.State {
             this.bulletHitChopperHandler,
             null, this
         );
+
+        this.game.physics.arcade.overlap(
+            this.bulletFactory.bulletGroup,
+            this.paratrooperGroup,
+            this.bulletHitParatrooperHandler,
+            null, this
+        );
+    }
+
+    bulletHitParatrooperHandler(bullet, paratrooper) {
+        this.bulletHitAnythingHandler(bullet);
+        paratrooper.hit();
     }
 
     bulletHitChopperHandler(bullet, chopper) {
-        this.emitterFactory.explode(bullet.x, bullet.y, bullet.body.velocity.x, bullet.body.velocity.y);
+        this.bulletHitAnythingHandler(bullet);
         this.paratrooperGroup.create(chopper);
+        chopper.hit();
+    }
 
+    bulletHitAnythingHandler(bullet) {
+        this.emitterFactory.explode(bullet.x, bullet.y, bullet.body.velocity.x, bullet.body.velocity.y);
         bullet.kill();
-        chopper.kill();
-        this.game.scoreKeeper.killedChopper();
     }
 
 }

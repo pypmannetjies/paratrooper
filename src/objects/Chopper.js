@@ -11,6 +11,11 @@ class Chopper extends Phaser.Sprite {
         this.game.physics.enable(this, Phaser.Physics.ARCADE);
     }
 
+    hit() {
+        this.kill();
+        this.game.scoreKeeper.killedChopper();
+    }
+
     update() {
         this.body.velocity.x = this.speed;
     }
