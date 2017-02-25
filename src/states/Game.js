@@ -37,7 +37,7 @@ class GameState extends Phaser.State {
     }
 
     processInput() {
-        if (this.cursors.up.isDown) {
+        if (this.cursors.up.isDown || this.game.input.pointer1.isDown) {
             this.bulletFactory.shoot();
         }
     }

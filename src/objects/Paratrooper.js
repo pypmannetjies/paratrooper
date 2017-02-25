@@ -1,31 +1,44 @@
+import ScoreKeeperBus from "signals/ScoreKeeperBus";
+
 class Paratrooper extends Phaser.Sprite {
 
     constructor(game) {
-        super(game, 0, 40, 'trooper');
+        super(game);
+
         this.createParatrooper();
         this.createShoot();
+        this.game.physics.enable(this, Phaser.Physics.ARCADE);
+
         this.speed = 200;
     }
 
     createParatrooper() {
-        this.game.physics.enable(this, Phaser.Physics.ARCADE);
-        this.anchor.x = 0.5;
+        let trooper = new Phaser.Sprite(this.game, 0, 0, 'trooper', undefined, false);
+        trooper.anchor.x = 0.5;
+        this.addChild(trooper);
     }
 
     createShoot() {
-        this.parashoot = new Phaser.Sprite(this.game, 0, 0, 'parashoot');
-        this.parashoot.anchor.x = 0.5;
-        this.parashoot.anchor.y = 1;
+        this.shoot = new Phaser.Sprite(this.game, 0, 0, 'parashoot', undefined, false);
+        this.shoot.anchor.x = 0.5;
+        this.shoot.anchor.y = 1;
+        this.addChild(this.shoot); 
     }
 
     addShoot() {
         this.hasShoot = true;
-        this.addChild(this.parashoot);
+        this.shoot.exists = true;
         this.speed = 100;
+               
     }
 
     set speed(speed) {
         this.body.velocity.y = speed;
+    }
+
+    hit() {
+        this.kill();
+        ScoreKeeperBus.killedTrooper.dispatch();
     }
 
     update() {

@@ -1,3 +1,5 @@
+import ScoreKeeperBus from "signals/ScoreKeeperBus";
+
 class Chopper extends Phaser.Sprite {
 
     constructor(game) {
@@ -13,7 +15,7 @@ class Chopper extends Phaser.Sprite {
 
     hit() {
         this.kill();
-        this.game.scoreKeeper.killedChopper();
+        ScoreKeeperBus.killedChopper.dispatch();
     }
 
     update() {

@@ -36,13 +36,14 @@ class Turret extends Phaser.Sprite {
     }
 
     update() {
-        if (!this.cursors.up.isDown) {
+        // TODO reenable this
+        // if (!this.cursors.up.isDown) {
             if (this.cursors.left.isDown) {
                 this.rotateLeft();
             } else if (this.cursors.right.isDown) {
                 this.rotateRight();
             }
-        }
+        // }
     }
 
     rotateRight() {

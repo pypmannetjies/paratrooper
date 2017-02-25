@@ -1,5 +1,6 @@
 import Chopper from 'objects/Chopper';
 import RightChopper from 'objects/RightChopper';
+import GameBus from 'signals/GameBus';
 
 class ChopperFactory {
     constructor(game) {
@@ -21,9 +22,11 @@ class ChopperFactory {
 
             this.chopperGroup.add(chopper);
             this.chopperTime = this.game.time.now + r / this.factor;
+            GameBus.createTrooper.dispatch(chopper);
         }
 
-        this.factor = Math.ceil(this.game.time.now / 60000);
+        //TODO add this back
+        // this.factor = Math.ceil(this.game.time.now / 60000);
     }
 }
 

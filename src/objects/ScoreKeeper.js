@@ -1,3 +1,5 @@
+import ScoreKeeperBus from "signals/ScoreKeeperBus";
+
 class ScoreKeeper extends Phaser.Text {
     constructor(game) {
         super(game, 0, game.height - 50, "SCORE: 0", {
@@ -6,19 +8,22 @@ class ScoreKeeper extends Phaser.Text {
         this.score = 0;
         // this.anchor.y = 200;
         this.game.stage.addChild(this);
+        ScoreKeeperBus.shotsFired.add(this._shotsFired, this);
+        ScoreKeeperBus.killedChopper.add(this._killedChopper, this);
+        ScoreKeeperBus.killedTrooper.add(this._killedTrooper, this);
     }
 
-    shotsFired() {
+    _shotsFired() {
         if (this.score > 0) {
             this.updateScore(-1);
         }
     }
 
-    killedChopper() {
+    _killedChopper() {
         this.updateScore(10);
     }
 
-    killedParashooter() {
+    _killedTrooper() {
         this.updateScore(5);
     }
 

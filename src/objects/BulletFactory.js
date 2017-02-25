@@ -1,4 +1,5 @@
 import Bullet from 'objects/Bullet';
+import ScoreKeeperBus from "signals/ScoreKeeperBus";
 
 class BulletFactory {
     constructor(game, canon) {
@@ -12,9 +13,12 @@ class BulletFactory {
         if (this.game.time.now > this.bulletTime) {
             this.createBullet();
             this.bulletTime = this.game.time.now + 150;
+            ScoreKeeperBus.shotsFired.dispatch();
         }
     }
 
+    //TODO use object pool
+    //TODO use a group
     createBullet() {
         let startingPoint = new Phaser.Point(this.canon.x, this.canon.y - this.canon.height);
         startingPoint.rotate(this.canon.x, this.canon.y, this.canon.angle, true);
@@ -24,7 +28,6 @@ class BulletFactory {
             this.canon.angle
         );
         this.bulletGroup.add(bullet);
-        this.game.scoreKeeper.shotsFired();
     }
 }
 
