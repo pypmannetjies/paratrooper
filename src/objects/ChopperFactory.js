@@ -1,5 +1,4 @@
 import Chopper from 'objects/Chopper';
-import RightChopper from 'objects/RightChopper';
 import GameBus from 'signals/GameBus';
 
 class ChopperFactory {
@@ -8,19 +7,18 @@ class ChopperFactory {
         this.game = game;
         this.chopperTime = 0;
         this.chopperGroup = this.game.add.group();
+        this.chopperGroup.classType = Chopper;
     }
 
     getToAChopper() {
         let r = Math.floor(Math.random() * 6000);
         if (this.game.time.now >= this.chopperTime) {
-            let chopper;
-            if (r % 2 === 0) {
-                chopper = new Chopper(this.game);
-            } else {
-                chopper = new RightChopper(this.game);
-            }
 
-            this.chopperGroup.add(chopper);
+            let chopper = this.chopperGroup.getFirstExists(false, true, 0, 0);
+
+            let isRight = r % 2 !== 0;
+            chopper.init(isRight);
+
             this.chopperTime = this.game.time.now + r / this.factor;
             GameBus.createTrooper.dispatch(chopper);
         }

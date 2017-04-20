@@ -2,9 +2,8 @@ import Turret from 'objects/Turret';
 import Bullet from 'objects/Bullet';
 import ChopperFactory from 'objects/ChopperFactory';
 import BulletFactory from 'objects/BulletFactory';
-import ScoreKeeper from 'objects/ScoreKeeper';
 import ExplosionEmitterFactory from 'objects/ExplosionEmitter';
-import ParatrooperGroup from 'objects/ParatrooperGroup';
+import ParatrooperGroup from 'objects/paratrooper/ParatrooperGroup';
 
 class GameState extends Phaser.State {
 
@@ -24,7 +23,6 @@ class GameState extends Phaser.State {
         this.bulletTime = 0;
         this.chopperFactory = new ChopperFactory(this.game);
         this.bulletFactory = new BulletFactory(this.game, this.turret.canon);
-        this.game.scoreKeeper = new ScoreKeeper(this.game);
         this.emitterFactory = new ExplosionEmitterFactory(this.game);
         this.paratrooperGroup = new ParatrooperGroup(this.game);
         this.world.add(this.paratrooperGroup);
@@ -65,7 +63,6 @@ class GameState extends Phaser.State {
 
     bulletHitChopperHandler(bullet, chopper) {
         this.bulletHitAnythingHandler(bullet);
-        this.paratrooperGroup.create(chopper);
         chopper.hit();
     }
 
