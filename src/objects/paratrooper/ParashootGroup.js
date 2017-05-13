@@ -7,8 +7,8 @@ class ParashootGroup extends Phaser.Group {
     }
 
     createShoot(trooper) {
-        // let shoot = this.getFirstExists(false, true, 0, 0);
-        // shoot.init(trooper);
+        let shoot = this.getFirstExists(false, true, 0, 0);
+        shoot.init(trooper);
     }
 
 }
