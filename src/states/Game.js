@@ -1,9 +1,9 @@
 import Turret from 'objects/Turret';
-import Bullet from 'objects/Bullet';
 import ChopperFactory from 'objects/ChopperFactory';
 import BulletFactory from 'objects/BulletFactory';
 import ExplosionEmitterFactory from 'objects/ExplosionEmitter';
 import ParatrooperGroup from 'objects/paratrooper/ParatrooperGroup';
+import ParashootGroup from 'objects/paratrooper/ParashootGroup';
 
 class GameState extends Phaser.State {
 
@@ -24,7 +24,8 @@ class GameState extends Phaser.State {
         this.chopperFactory = new ChopperFactory(this.game);
         this.bulletFactory = new BulletFactory(this.game, this.turret.canon);
         this.emitterFactory = new ExplosionEmitterFactory(this.game);
-        this.paratrooperGroup = new ParatrooperGroup(this.game);
+        this.parashootGroup = new ParashootGroup(this.game);
+        this.paratrooperGroup = new ParatrooperGroup(this.game, this.parashootGroup);
         this.world.add(this.paratrooperGroup);
     }
 
@@ -54,6 +55,18 @@ class GameState extends Phaser.State {
             this.bulletHitParatrooperHandler,
             null, this
         );
+
+        this.game.physics.arcade.overlap(
+            this.bulletFactory.bulletGroup,
+            this.parashootGroup,
+            this.bulletHitParashootHandler,
+            null, this
+        );
+    }
+
+    bulletHitChopperHandler(bullet, chopper) {
+        this.bulletHitAnythingHandler(bullet);
+        chopper.hit();
     }
 
     bulletHitParatrooperHandler(bullet, paratrooper) {
@@ -61,9 +74,9 @@ class GameState extends Phaser.State {
         paratrooper.hit();
     }
 
-    bulletHitChopperHandler(bullet, chopper) {
+    bulletHitParashootHandler(bullet, parashoot) {
         this.bulletHitAnythingHandler(bullet);
-        chopper.hit();
+        parashoot.hit();
     }
 
     bulletHitAnythingHandler(bullet) {

@@ -8,7 +8,8 @@ class Parashoot extends Phaser.Sprite {
 
     init(trooper) {
         this.trooper = trooper;
-        this.trooper.events.onKilled.add(() => this.hit);
+        this.trooper.events.onKilled.addOnce(() => this._removeTrooper());
+        this.trooper.onTrooperLanded.addOnce(() => this._removeTrooper());
         this.x = trooper.x;
         this.anchor.x = 0.5;
         this.anchor.y = 1;
@@ -18,8 +19,15 @@ class Parashoot extends Phaser.Sprite {
         this.body.velocity.y = speed;
     }
 
+    _removeTrooper() {
+        if (this.trooper == null) return;
+        this.trooper = null;
+        this.destroy();
+    }
+
     hit() {
-        this.kill();
+        this.trooper.shootShotDown();
+        this._removeTrooper();
     }
 
     update() {

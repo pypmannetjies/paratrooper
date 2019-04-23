@@ -5,50 +5,63 @@ class Paratrooper extends Phaser.Sprite {
     constructor(game) {
         super(game, 0, 0, 'trooper');
         this.game.physics.enable(this, Phaser.Physics.ARCADE);
-        this._shootDeployed = new Phaser.Signal();
+        this._onShootDeployed = new Phaser.Signal();
+        this._onTrooperLanded = new Phaser.Signal();
     }
 
     init() {
         this.anchor.x = 0.5;
         this.speed = 200;
-        this.hasShoot = false;
+        this._shootWasDeployed = false;
+        this._fallingToDeath = false;
     }
 
-    addShoot() {
-        this.hasShoot = true;
+    _trooperDeployedShoot() {
+        if (this._shootWasDeployed) return;
         this.speed = 100;
-        this._shootDeployed.dispatch();
+        this._onShootDeployed.dispatch();
+        this._shootWasDeployed = true;
+    }
+
+    _trooperLanded() {
+        if (this._fallingToDeath) 
+        {
+            this.hit();
+            return;
+        }
+        this._onTrooperLanded.dispatch();
+        this.speed = 0;
     }
 
     set speed(speed) {
         this.body.velocity.y = speed;
     }
 
-    get shootDeployed() {
-        return this._shootDeployed;
+    get onShootDeployed() {
+        return this._onShootDeployed;
+    }
+
+    get onTrooperLanded() {
+        return this._onTrooperLanded;
     }
 
     hit() {
-        this.destroy();
+        this.kill();
         ScoreKeeperBus.killedTrooper.dispatch();
     }
 
     update() {
         if (this.y >= this.game.height / 2) {
-            this.addShoot();
+            this._trooperDeployedShoot();
             if (this.y + this.height >= this.game.height) {
-                this.land();
+                this._trooperLanded();
             }
         }
     }
 
-    land() {
-        if (this.shoot) {
-            this.shoot.destroy();
-            this.speed = 0;
-        } else {
-            this.hit();
-        }
+    shootShotDown() {
+        this._fallingToDeath = true;
+        this.speed = 200;
     }
 }
 
