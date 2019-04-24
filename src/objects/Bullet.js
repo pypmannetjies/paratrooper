@@ -1,24 +1,24 @@
+import Phaser from 'phaser'
+
 class Bullet extends Phaser.Sprite {
+  constructor (game, x, y, firingAngle) {
+    super(game, x, y, 'bullet')
+    this._createBullet()
+    this.speed = 300
+    this.firingAngle = firingAngle + 90
+  }
 
-    constructor(game, x, y, firingAngle) {
-        super(game, x, y, 'bullet');
-        this.createBullet();
-        this.speed = 300;
-        this.firingAngle = firingAngle + 90;
-    }
+  _createBullet () {
+    this.anchor.x = 0.5
+    this.anchor.y = 0.5
+    this.game.physics.enable(this, Phaser.Physics.ARCADE)
+  }
 
-    createBullet() {
-        this.anchor.x = 0.5;
-        this.anchor.y = 0.5;
-        this.game.physics.enable(this, Phaser.Physics.ARCADE);
-
-    }
-
-    update() {
-        let velocity = this.game.physics.arcade.velocityFromAngle(this.firingAngle, this.speed);
-        this.body.velocity.x = -velocity.x;
-        this.body.velocity.y = -velocity.y;
-    }
+  update () {
+    let velocity = this.game.physics.arcade.velocityFromAngle(this.firingAngle, this.speed)
+    this.body.velocity.x = -velocity.x
+    this.body.velocity.y = -velocity.y
+  }
 }
 
-export default Bullet;
+export default Bullet

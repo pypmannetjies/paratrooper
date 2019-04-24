@@ -1,13 +1,16 @@
-import GameState from 'states/Game';
+import GameState from 'states/Game'
+import Phaser from 'phaser'
 
 class Game extends Phaser.Game {
+  constructor () {
+    super('100%', '100%', Phaser.AUTO, 'content', null)
+  }
 
-    constructor() {
-        super("100%", "100%", Phaser.AUTO, 'content', null);
-        this.state.add('Game', GameState, false);
-        this.state.start('Game');
-    }
-
+  start () {
+    this.state.add('Game', GameState, false)
+    this.state.start('Game')
+  }
 }
 
-new Game();
+const game = new Game()
+game.start()
