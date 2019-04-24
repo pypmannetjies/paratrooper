@@ -1,74 +1,39 @@
-import ScoreKeeperBus from "signals/ScoreKeeperBus";
-import GameBus from 'signals/GameBus';
+import ScoreKeeperBus from 'signals/ScoreKeeperBus'
+import LeftChopperController from 'objects/chopper/LeftChopperController'
+import RightChopperController from 'objects/chopper/RightChopperController'
+import Phaser from 'phaser'
 
 class Chopper extends Phaser.Sprite {
+  constructor (game) {
+    super(game, 0, 0, 'chopper')
+    this.createChopper()
+  }
 
-    constructor(game) {
-        super(game, 0, 0, 'chopper');
-        this.createChopper();
-        this._isRight = false;
-        this._trooperDropLocation = Math.random() * game.width;
-        this._droppedTrooper = false;
-    }
+  createChopper () {
+    this.game.physics.enable(this, Phaser.Physics.ARCADE)
+    this._chopperController = null
+  }
 
-    createChopper() {
-        this.game.physics.enable(this, Phaser.Physics.ARCADE);
+  init (isRight) {
+    if (isRight) {
+      this._chopperController = new RightChopperController(this, this.game.width)
+    } else {
+      this._chopperController = new LeftChopperController(this, this.game.width)
     }
+  }
 
-    init(isRight) {
-        this._isRight = isRight;
-        if (isRight) {
-            this.turnRight();
-        } else {
-            this.x -= this.width;
-            this.y = this.height + 15;
-            this.speed = 100;
-        }
-    }
+  set speed (speed) {
+    this.body.velocity.x = speed
+  }
 
-    turnRight() {
-        this.x = this.game.width;
-        this.y = 10;
-        this.speed = -100;
-        if (this.scale.x > 0) {
-            this.scale.x *= -1;
-        }
-    }
+  hit () {
+    ScoreKeeperBus.killedChopper.dispatch()
+    this.destroy()
+  }
 
-    set speed(speed) {
-        this.body.velocity.x = speed;
-    }
-
-    hit() {
-        ScoreKeeperBus.killedChopper.dispatch();
-        this.destroy();
-    }
-
-    update() {
-        if (this._isRight) {
-            if (this.x < 0) {
-                this.destroy();
-            } else if (this.x <= this._trooperDropLocation) {
-                this._dropTrooper();
-            }
-        } else {
-            if (this.x > this.game.width) {
-                this.destroy();
-            } else if (this.x >= this._trooperDropLocation) {
-                this._dropTrooper();
-            }
-        }
-        // if ((this._isRight && this.x < 0) || (!this._isRight && this.x > this.game.width)) {
-        //     this.destroy();
-        // }
-        // if (this.x == this.game.width)
-    }
-
-    _dropTrooper() {
-        if (this._droppedTrooper) return;
-        GameBus.createTrooper.dispatch(this);
-        this._droppedTrooper = true;
-    }
+  update () {
+    this._chopperController.update()
+  }
 }
 
-export default Chopper;
+export default Chopper
