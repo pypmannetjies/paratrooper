@@ -20,7 +20,6 @@ class ChopperFactory {
             chopper.init(isRight);
 
             this.chopperTime = this.game.time.now + r / this.factor;
-            GameBus.createTrooper.dispatch(chopper);
         }
 
         //TODO add this back

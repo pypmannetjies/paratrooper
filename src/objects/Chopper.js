@@ -1,4 +1,5 @@
 import ScoreKeeperBus from "signals/ScoreKeeperBus";
+import GameBus from 'signals/GameBus';
 
 class Chopper extends Phaser.Sprite {
 
@@ -6,6 +7,8 @@ class Chopper extends Phaser.Sprite {
         super(game, 0, 0, 'chopper');
         this.createChopper();
         this._isRight = false;
+        this._trooperDropLocation = Math.random() * game.width;
+        this._droppedTrooper = false;
     }
 
     createChopper() {
@@ -42,9 +45,29 @@ class Chopper extends Phaser.Sprite {
     }
 
     update() {
-        if ((this._isRight && this.x < 0) || (!this._isRight && this.x > this.game.width)) {
-            this.destroy();
+        if (this._isRight) {
+            if (this.x < 0) {
+                this.destroy();
+            } else if (this.x <= this._trooperDropLocation) {
+                this._dropTrooper();
+            }
+        } else {
+            if (this.x > this.game.width) {
+                this.destroy();
+            } else if (this.x >= this._trooperDropLocation) {
+                this._dropTrooper();
+            }
         }
+        // if ((this._isRight && this.x < 0) || (!this._isRight && this.x > this.game.width)) {
+        //     this.destroy();
+        // }
+        // if (this.x == this.game.width)
+    }
+
+    _dropTrooper() {
+        if (this._droppedTrooper) return;
+        GameBus.createTrooper.dispatch(this);
+        this._droppedTrooper = true;
     }
 }
 
