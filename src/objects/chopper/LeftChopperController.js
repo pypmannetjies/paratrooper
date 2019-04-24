@@ -1,14 +1,11 @@
-import GameBus from 'signals/GameBus'
+import BaseChopperController from './BaseChopperController'
 
-class LeftChopperController {
+class LeftChopperController extends BaseChopperController {
   constructor (chopper, rightEdge) {
-    this.chopper = chopper
+    super(chopper, rightEdge)
     chopper.x -= chopper.width
     chopper.y = chopper.height + 15
     chopper.speed = 100
-    this._trooperDropLocation = Math.random() * rightEdge
-    this._droppedTrooper = false
-    this._rightEdge = rightEdge
   }
 
   update () {
@@ -17,17 +14,6 @@ class LeftChopperController {
     } else if (this.chopper.x >= this._trooperDropLocation) {
       this._dropTrooper()
     }
-  }
-
-  _dropTrooper () {
-    if (this._droppedTrooper) return
-    GameBus.createTrooper.dispatch(this.chopper)
-    this._droppedTrooper = true
-  }
-
-  destroy () {
-    this.chopper.destroy()
-    this.chopper = null
   }
 }
 
